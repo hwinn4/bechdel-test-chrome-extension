@@ -3,15 +3,16 @@ function displayResponse(response) {
 
   if (response.rating == 0) {
     eval = "This movie does not have at least 2 named women :(";
+
   } else if (response.rating == 1) {
     eval = "The named women in the movie don't talk to each other. Eek.";
+
   } else if (response.rating == 2) {
     eval = "The named women talk to each other, but only about a man. Hmph.";
+
   } else if (response.rating == 3) {
     eval = "It passes! The named women talk to each other about something besides a man.";
   }
-
-  // var bechdelRating = response.title + ": " + eval;
 
   var loadingElement = document.getElementById('loading');
   var titleElement = document.getElementById('title');

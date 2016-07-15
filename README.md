@@ -17,6 +17,6 @@ Known Issues:
 
 - Titles with "the" appear with a comma, e.g. "Secret Life of Pets, The"
 
-- View is blank: Ghostbusters (2016)
+- Popup is blank: Ghostbusters (2016)
 
 

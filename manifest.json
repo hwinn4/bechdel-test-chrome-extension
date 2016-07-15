@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Movie Bechdel Test",
+  "description": "Does the movie you are reading about on IMDB pass the Bechdel test?",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Does this movie pass?"
+  },
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "http://bechdeltest.com/api/v1/*"
+  ]
+}

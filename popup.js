@@ -1,36 +1,78 @@
-function displayResponse(response) {
+function setRatingText(rating) {
   var eval; 
 
-  if (response.rating == 0) {
+  if (rating == 0) {
     eval = "This movie does not have at least 2 named women :(";
 
-  } else if (response.rating == 1) {
-    eval = "The named women in the movie don't talk to each other. Eek.";
+  } else if (rating == 1) {
+    eval = "There are 2 named women in this movie, but they don't talk to each other. Eek.";
 
-  } else if (response.rating == 2) {
-    eval = "The named women talk to each other, but only about a man. Hmph.";
+  } else if (rating == 2) {
+    eval = "The are 2 named women in this movie who talk to each other, but they only about men. Hmph.";
 
-  } else if (response.rating == 3) {
-    eval = "It passes! The named women talk to each other about something besides a man.";
+  } else if (rating == 3) {
+    eval = "It passes! There are at least 2 named women who talk to each other about something besides a man.";
   }
 
+  return eval;
+}
+
+function setDisplayText(response) {
+  var displayText;
+
+  if (response.status == '404') {
+    var noRatingElement = document.getElementById('no-rating');
+    noRatingElement.style.display = 'block';
+  
+  } else if (response.status == '403') {
+    displayText = "A rating for this movie has been submitted, but it hasn't been approved yet."
+  
+  } else if (response.status == '505') {
+    displayText = "Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store."
+  
+  } else {
+    displayText = setRatingText(response.rating);
+  }
+
+  return displayText;
+}
+
+function hideLoadingElement() {
   var loadingElement = document.getElementById('loading');
-  var titleElement = document.getElementById('title');
-  var ratingElement = document.getElementById('rating');
-
-  loadingElement.textContent = '';
   loadingElement.style.display = 'none';
+}
 
-  titleElement.textContent = response.title;
+function showLoadingElement() {
+  var loadingElement = document.getElementById('loading');
+  loadingElement.style.display = 'block';
+}
+
+function setTitleElement(title) {
+  var titleElement = document.getElementById('title');
+  titleElement.textContent = title;
   titleElement.style.display = 'block';
+}
 
-  ratingElement.textContent = eval;
+function setRatingElement(displayText) {
+  var ratingElement = document.getElementById('rating');
+  ratingElement.textContent = displayText;
   ratingElement.style.display = 'block';
+}
 
+function displayResponse(response) {
+  var displayText = setDisplayText(response);
+
+  hideLoadingElement();
+
+  setTitleElement(response.title);
+
+  setRatingElement(displayText);
 }
 
 function getBechdelData(url) {
-  if (url.indexOf('imdb.com') > -1 ) {
+  if (url.match('http://www.imdb.com/*') && url !== "http://www.imdb.com/") {
+    showLoadingElement();
+
     var urlArray = url.split('/');
     var imdbID = urlArray[4];
     var imdbIDNum = imdbID.slice(2, imdbID.length);
@@ -54,10 +96,10 @@ function getBechdelData(url) {
     xhr.send();
 
   } else {
-    // FIGURE OUT LATER
-    // var msg = "<p>Head over to <a href='https://www.imdb.com' target='_blank'>IMDB</a> to use this extension.</p>";
-    // $('#result').html(msg);
-    // document.getElementById('result').innerHtml = msg;
+    hideLoadingElement();
+
+    var notImdbElement = document.getElementById('not-imdb');
+    notImdbElement.style.display = 'block';
   }
 }
 

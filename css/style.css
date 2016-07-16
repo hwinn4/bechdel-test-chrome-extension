@@ -28,10 +28,14 @@ body {
 
 #not-imdb {
   display: none;
+  text-align: center;
+  font-size: 30px;
 }
 
-#no-rating {
+#no-rating, #rating-submitted, #wrong-api-version {
   display: none;
+  text-align: center;
+  font-size: 20px;
 }
 
 #scale {

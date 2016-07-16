@@ -34,11 +34,6 @@ function setElementText(elementId, text) {
   el.style.display = 'block';
 }
 
-function colors(rating) {
-
-  return colors[rating];
-}
-
 function setRatingsBar(rating) {
   var bars = document.getElementsByClassName('scale-bar');
 

@@ -6,8 +6,16 @@ var ratingText = {
 };
 
 var errorMessages = {
-  '403' : 'A rating for this movie has been submitted, but it hasn\'t been approved yet.',
-  '505' : 'Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store.'
+  '404' : 'no-rating',
+  '403' : 'rating-submitted',
+  '505' : 'wrong-api-version'
+};
+
+var colors = {
+  '0' : 'lightgray', 
+  '1' : '#e11c0e', 
+  '2' : '#fcee75',
+  '3' : '#92d76f'
 };
 
 function hideElement(id) {
@@ -26,17 +34,14 @@ function setElementText(elementId, text) {
   el.style.display = 'block';
 }
 
+function colors(rating) {
+
+  return colors[rating];
+}
+
 function setRatingsBar(rating) {
   var bars = document.getElementsByClassName('scale-bar');
 
-  var colors = {
-    '0' : 'lightgray', 
-    '1' : '#e11c0e', 
-    '2' : '#fcee75',
-    '3' : '#92d76f'
-  };
-
-  console.log(colors[rating]);
   for(var i = 0; i < rating; i++) {
     bars[i].style.background = colors[rating];
   }
@@ -44,41 +49,24 @@ function setRatingsBar(rating) {
   document.getElementById('scale').style.display = 'flex';
 }
 
-function setDisplayText(response) {
-  var displayText;
-
-  if (response.status == '404') {
-    hideElement('rating');
-    showElement('no-rating');
-  
-  } else if (response.status == '403') {
-    hideElement('rating');
-    displayText = errorMessages['403'];
-  
-  } else if (response.status == '505') {
-    displayText = errorMessages['505'];
-  
-  } else {
-    displayText = ratingText[(response.rating).toString()];
-    setRatingsBar(response.rating);
-  }
-
-  return displayText;
-}
-
 function displayResponse(response) {
-  var displayText = setDisplayText(response);
-
   hideElement('loading');
 
-  setElementText('title', response.title);
+  if (response.status) {
+    hideElement('rating');
 
-  setElementText('rating', displayText);
+    showElement(errorMessages[response.status]);
+
+  } else {
+    setRatingsBar(response.rating);
+
+    setElementText('title', response.title);
+    setElementText('rating', ratingText[(response.rating)]);
+  }
 }
 
 function apiEndpointUrl(url) {
-  var urlArray = url.split('/');
-  var fullImdbID = urlArray[4];
+  var fullImdbID = url.split('/')[4];
   var imdbIDNum = fullImdbID.slice(2, fullImdbID.length);
   var endpoint = "http://bechdeltest.com/api/v1/getMovieByImdbId?imdbid=" + imdbIDNum;
 

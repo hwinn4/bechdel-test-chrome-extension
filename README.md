@@ -7,11 +7,12 @@ http://bechdeltest.com/api/v1/doc
 1. Named women don't talk to each other: Spider-Man (2002)
 2. Named women only talk to each other about men: Gods of Egypt
 3. Movie that passes: When Harry Met Sally
+4. Rating pending: Ghostbusters (2016)
+5. No rating: The Main Event
 
 Known Issues: 
 - Movie with a special character in title: Pirates of the Caribbean 2 (2006)
-- Undefined : undefined
-- Titles with "the" appear with a comma, e.g. "Secret Life of Pets, The"
+- Undefined : undefined ?
+- Titles that start with "the" appear with a comma, e.g. "Secret Life of Pets, The"
 - dubiousness?
-- Popup is blank: Ghostbusters (2016)
 

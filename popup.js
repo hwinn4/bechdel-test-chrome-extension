@@ -1,21 +1,14 @@
-function setRatingText(rating) {
-  var eval; 
+var ratingText = {
+  '0' : 'This movie does not have at least 2 named women :(',
+  '1' : 'There are 2 named women in this movie, but they don\'t talk to each other. Eek.',
+  '2' : 'The are 2 named women in this movie who talk to each other, but they only talk about men. Hmph.',
+  '3' : 'It passes! There are at least 2 named women who talk to each other about something besides a man.'
+};
 
-  if (rating == 0) {
-    eval = "This movie does not have at least 2 named women :(";
-
-  } else if (rating == 1) {
-    eval = "There are 2 named women in this movie, but they don't talk to each other. Eek.";
-
-  } else if (rating == 2) {
-    eval = "The are 2 named women in this movie who talk to each other, but they only talk about men. Hmph.";
-
-  } else if (rating == 3) {
-    eval = "It passes! There are at least 2 named women who talk to each other about something besides a man.";
-  }
-
-  return eval;
-}
+var errorMessages = {
+  '403' : 'A rating for this movie has been submitted, but it hasn\'t been approved yet.',
+  '505' : 'Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store.'
+};
 
 function hideElement(id) {
   var el = document.getElementById(id);
@@ -48,19 +41,17 @@ function setDisplayText(response) {
 
   if (response.status == '404') {
     hideElement('rating');
-
     showElement('no-rating');
   
   } else if (response.status == '403') {
     hideElement('rating');
-    displayText = "A rating for this movie has been submitted, but it hasn't been approved yet."
+    displayText = errorMessages['403'];
   
   } else if (response.status == '505') {
-    displayText = "Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store."
+    displayText = errorMessages['505'];
   
   } else {
-    displayText = setRatingText(response.rating);
-
+    displayText = ratingText[(response.rating).toString()];
     setRatingsBar(response.rating);
   }
 
@@ -77,30 +68,36 @@ function displayResponse(response) {
   setElementText('rating', displayText);
 }
 
+function apiEndpointUrl(url) {
+  var urlArray = url.split('/');
+  var fullImdbID = urlArray[4];
+  var imdbIDNum = fullImdbID.slice(2, fullImdbID.length);
+  var endpoint = "http://bechdeltest.com/api/v1/getMovieByImdbId?imdbid=" + imdbIDNum;
+
+  return endpoint;
+}
+
 function getBechdelData(url) {
   if (url.match('http://www.imdb.com/*') && url !== "http://www.imdb.com/") {
     showElement('loading');
 
-    var urlArray = url.split('/');
-    var imdbID = urlArray[4];
-    var imdbIDNum = imdbID.slice(2, imdbID.length);
-    var endpoint = "http://bechdeltest.com/api/v1/getMovieByImdbId?imdbid=" + imdbIDNum;
+    var endpoint = apiEndpointUrl(url)
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", endpoint);
     xhr.responseType = 'json';
   
+    xhr.send();
+
     xhr.onload = function() {
       var response = xhr.response;
-
       displayResponse(response);
     };
 
     xhr.onerror = function() {
-      document.getElementById('result').textContent = "Hmmm...try a different movie! You can add your own ratings to the Bechdel Test API <a href='http://bechdeltest.com/add/'>here</a>";
+      hideElement('loading');
+      showElement('ajax-error');
     };
-
-    xhr.send();
 
   } else {
     hideElement('loading');
@@ -140,9 +137,6 @@ function getCurrentTabUrl(callback) {
     callback(url);
   });
 }
-// function renderBechdelRating(statusText) {
-//   document.getElementById('status').textContent = statusText;
-// }
 
 document.addEventListener('DOMContentLoaded', function() {
   var url = getCurrentTabUrl(getBechdelData);

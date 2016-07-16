@@ -37,6 +37,9 @@
       margin-left: 2px;
       padding: 2px;
     }
+    #ajax-error {
+      display: none;
+    }
   </style>
   <script src="js/vendor/jquery-2.2.2.min.js"></script>
   <script src="popup.js"></script>
@@ -44,13 +47,19 @@
 <body>
   <div id="info">
     <p id="not-imdb">Look up a specific movie on <a href='https://www.imdb.com' target='_blank'>IMDB</a> to use this extension.</p>
+
     <p id="no-rating">No one has added a rating for this movie! Or maybe this listing is a TV show? If it's a movie, you can add a rating <a href='http://bechdeltest.com/add/' target='_blank'>here</a>.</p>
+
+    <p id="ajax-error">Hmmm...looks like something went wrong. You can add your own ratings to the Bechdel Test API <a href='http://bechdeltest.com/add/' target='_blank'>here</a></p>
+
     <p id="loading">Loading...</p>
+
     <div id="scale">
       <div class="scale-bar"></div>
       <div class="scale-bar"></div>
       <div class="scale-bar"></div>
     </div>
+
     <h2 id="title"></h2>
     <p id="rating"></p>
   </div>

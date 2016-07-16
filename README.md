@@ -13,4 +13,5 @@ Known Issues:
 - Undefined : undefined
 - Titles with "the" appear with a comma, e.g. "Secret Life of Pets, The"
 - dubiousness?
+- Popup is blank: Ghostbusters (2016)
 

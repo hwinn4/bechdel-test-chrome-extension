@@ -8,33 +8,13 @@ function setRatingText(rating) {
     eval = "There are 2 named women in this movie, but they don't talk to each other. Eek.";
 
   } else if (rating == 2) {
-    eval = "The are 2 named women in this movie who talk to each other, but they only about men. Hmph.";
+    eval = "The are 2 named women in this movie who talk to each other, but they only talk about men. Hmph.";
 
   } else if (rating == 3) {
     eval = "It passes! There are at least 2 named women who talk to each other about something besides a man.";
   }
 
   return eval;
-}
-
-function setDisplayText(response) {
-  var displayText;
-
-  if (response.status == '404') {
-    var noRatingElement = document.getElementById('no-rating');
-    noRatingElement.style.display = 'block';
-  
-  } else if (response.status == '403') {
-    displayText = "A rating for this movie has been submitted, but it hasn't been approved yet."
-  
-  } else if (response.status == '505') {
-    displayText = "Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store."
-  
-  } else {
-    displayText = setRatingText(response.rating);
-  }
-
-  return displayText;
 }
 
 function hideLoadingElement() {
@@ -57,6 +37,46 @@ function setRatingElement(displayText) {
   var ratingElement = document.getElementById('rating');
   ratingElement.textContent = displayText;
   ratingElement.style.display = 'block';
+}
+
+function setRatingsBar(rating) {
+  var bars = document.getElementsByClassName('scale-bar');
+
+  for(var i = 0; i < rating; i++) {
+    bars[i].style.background = '#92d76f';
+  }
+
+  document.getElementById('scale').style.display = 'flex';
+}
+
+function hideRatingsBar() {
+  document.getElementById('scale').style.display = 'none';
+}
+
+
+function setDisplayText(response) {
+  var displayText;
+
+  if (response.status == '404') {
+    hideRatingsBar();
+
+    var noRatingElement = document.getElementById('no-rating');
+    noRatingElement.style.display = 'block';
+  
+  } else if (response.status == '403') {
+    hideRatingsBar();
+    displayText = "A rating for this movie has been submitted, but it hasn't been approved yet."
+  
+  } else if (response.status == '505') {
+    displayText = "Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store."
+  
+  } else {
+    displayText = setRatingText(response.rating);
+
+    setRatingsBar(response.rating);
+  }
+
+  return displayText;
 }
 
 function displayResponse(response) {
@@ -83,7 +103,6 @@ function getBechdelData(url) {
     xhr.responseType = 'json';
   
     xhr.onload = function() {
-      console.log('xhr onload');
       var response = xhr.response;
 
       displayResponse(response);
@@ -97,6 +116,7 @@ function getBechdelData(url) {
 
   } else {
     hideLoadingElement();
+    hideRatingsBar();
 
     var notImdbElement = document.getElementById('not-imdb');
     notImdbElement.style.display = 'block';

@@ -10,8 +10,7 @@ http://bechdeltest.com/api/v1/doc
 
 Known Issues: 
 - Movie with a special character in title: Pirates of the Caribbean 2 (2006)
-
 - Undefined : undefined
-
 - Titles with "the" appear with a comma, e.g. "Secret Life of Pets, The"
+- dubiousness?
 

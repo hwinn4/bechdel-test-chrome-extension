@@ -6,7 +6,15 @@ body {
 #info {
   white-space: normal;
   min-width: 500px;
-  min-height: 100px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+#loading {
+  text-align: center;
+  font-size: 50px;
 }
 
 #title {
@@ -41,4 +49,15 @@ body {
 
 #ajax-error {
   display: none;
+}
+
+#no-affiliation {
+  font-size: 8px;
+  color: lightgray;
+  margin-bottom: 2px;
+  align-self: flex-end;
+}
+
+#no-affiliation a {
+  color: darkgray;
 }

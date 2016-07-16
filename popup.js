@@ -17,9 +17,9 @@ function setRatingText(rating) {
   return eval;
 }
 
-function hideLoadingElement() {
-  var loadingElement = document.getElementById('loading');
-  loadingElement.style.display = 'none';
+function hideElement(id) {
+  var el = document.getElementById(id);
+  el.style.display = 'none';
 }
 
 function showLoadingElement() {
@@ -49,22 +49,18 @@ function setRatingsBar(rating) {
   document.getElementById('scale').style.display = 'flex';
 }
 
-function hideRatingsBar() {
-  document.getElementById('scale').style.display = 'none';
-}
-
 
 function setDisplayText(response) {
   var displayText;
 
   if (response.status == '404') {
-    hideRatingsBar();
+    hideElement('rating');
 
     var noRatingElement = document.getElementById('no-rating');
     noRatingElement.style.display = 'block';
   
   } else if (response.status == '403') {
-    hideRatingsBar();
+    hideElement('rating');
     displayText = "A rating for this movie has been submitted, but it hasn't been approved yet."
   
   } else if (response.status == '505') {
@@ -82,7 +78,7 @@ function setDisplayText(response) {
 function displayResponse(response) {
   var displayText = setDisplayText(response);
 
-  hideLoadingElement();
+  hideElement('loading');
 
   setTitleElement(response.title);
 
@@ -115,8 +111,8 @@ function getBechdelData(url) {
     xhr.send();
 
   } else {
-    hideLoadingElement();
-    hideRatingsBar();
+    hideElement('loading');
+    hideElement('rating');
 
     var notImdbElement = document.getElementById('not-imdb');
     notImdbElement.style.display = 'block';

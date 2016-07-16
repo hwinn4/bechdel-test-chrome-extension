@@ -22,21 +22,15 @@ function hideElement(id) {
   el.style.display = 'none';
 }
 
-function showLoadingElement() {
-  var loadingElement = document.getElementById('loading');
-  loadingElement.style.display = 'block';
+function showElement(elementId) {
+  var el = document.getElementById(elementId);
+  el.style.display = 'block'; 
 }
 
-function setTitleElement(title) {
-  var titleElement = document.getElementById('title');
-  titleElement.textContent = title;
-  titleElement.style.display = 'block';
-}
-
-function setRatingElement(displayText) {
-  var ratingElement = document.getElementById('rating');
-  ratingElement.textContent = displayText;
-  ratingElement.style.display = 'block';
+function setElementText(elementId, text) {
+  var el = document.getElementById(elementId);
+  el.textContent = text;
+  el.style.display = 'block';
 }
 
 function setRatingsBar(rating) {
@@ -49,15 +43,13 @@ function setRatingsBar(rating) {
   document.getElementById('scale').style.display = 'flex';
 }
 
-
 function setDisplayText(response) {
   var displayText;
 
   if (response.status == '404') {
     hideElement('rating');
 
-    var noRatingElement = document.getElementById('no-rating');
-    noRatingElement.style.display = 'block';
+    showElement('no-rating');
   
   } else if (response.status == '403') {
     hideElement('rating');
@@ -80,14 +72,14 @@ function displayResponse(response) {
 
   hideElement('loading');
 
-  setTitleElement(response.title);
+  setElementText('title', response.title);
 
-  setRatingElement(displayText);
+  setElementText('rating', displayText);
 }
 
 function getBechdelData(url) {
   if (url.match('http://www.imdb.com/*') && url !== "http://www.imdb.com/") {
-    showLoadingElement();
+    showElement('loading');
 
     var urlArray = url.split('/');
     var imdbID = urlArray[4];
@@ -112,10 +104,10 @@ function getBechdelData(url) {
 
   } else {
     hideElement('loading');
+
     hideElement('rating');
 
-    var notImdbElement = document.getElementById('not-imdb');
-    notImdbElement.style.display = 'block';
+    showElement('not-imdb');
   }
 }
 

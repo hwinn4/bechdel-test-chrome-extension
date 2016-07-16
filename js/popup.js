@@ -1,8 +1,8 @@
 var ratingText = {
-  '0' : 'This movie does not have at least 2 named women :(',
-  '1' : 'There are 2 named women in this movie, but they don\'t talk to each other. Eek.',
-  '2' : 'The are 2 named women in this movie who talk to each other, but they only talk about men. Hmph.',
-  '3' : 'It passes! There are at least 2 named women who talk to each other about something besides a man.'
+  '0' : 'This movie does not have at least 2 women with names :(',
+  '1' : 'There are 2 women with names in this movie, but they don\'t talk to each other. Eek.',
+  '2' : 'There are 2 women with names in this movie who talk to each other, but they only talk about men. Hmph.',
+  '3' : 'It passes! There are at least 2 women with names who talk to each other about something besides a man.'
 };
 
 var errorMessages = {
@@ -29,8 +29,16 @@ function setElementText(elementId, text) {
 function setRatingsBar(rating) {
   var bars = document.getElementsByClassName('scale-bar');
 
+  var colors = {
+    '0' : 'lightgray', 
+    '1' : '#e11c0e', 
+    '2' : '#fcee75',
+    '3' : '#92d76f'
+  };
+
+  console.log(colors[rating]);
   for(var i = 0; i < rating; i++) {
-    bars[i].style.background = '#92d76f';
+    bars[i].style.background = colors[rating];
   }
 
   document.getElementById('scale').style.display = 'flex';

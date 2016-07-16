@@ -1,0 +1,44 @@
+body {
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-size: 100%;
+}
+
+#info {
+  white-space: normal;
+  min-width: 500px;
+  min-height: 100px;
+}
+
+#title {
+  display: none;
+  margin-top: 10px;
+}
+
+#rating {
+  display: none;
+}
+
+#not-imdb {
+  display: none;
+}
+
+#no-rating {
+  display: none;
+}
+
+#scale {
+  display: none;
+  margin-top: 20px;
+}
+
+.scale-bar {
+  width: 32px;
+  height: 2px;
+  background: lightgray;
+  margin-left: 2px;
+  padding: 2px;
+}
+
+#ajax-error {
+  display: none;
+}

@@ -1,23 +1,110 @@
-function displayResult(url) {
-  if (url.indexOf('imdb.com') > -1 ) {
-    var urlArray = url.split('/');
+var ratingText = {
+  '0' : 'This movie does not have at least 2 named women :(',
+  '1' : 'There are 2 named women in this movie, but they don\'t talk to each other. Eek.',
+  '2' : 'The are 2 named women in this movie who talk to each other, but they only talk about men. Hmph.',
+  '3' : 'It passes! There are at least 2 named women who talk to each other about something besides a man.'
+};
 
-    var imdbID = urlArray[4];
+var errorMessages = {
+  '403' : 'A rating for this movie has been submitted, but it hasn\'t been approved yet.',
+  '505' : 'Hmmm something went wrong. Please contact the creators of this extension through the Chrome Store.'
+};
 
-    var imdbIDNum = imdbID.slice(2, imdbID.length);
+function hideElement(id) {
+  var el = document.getElementById(id);
+  el.style.display = 'none';
+}
 
+function showElement(elementId) {
+  var el = document.getElementById(elementId);
+  el.style.display = 'block'; 
+}
 
-    var bechdelApiUrl = "http://bechdeltest.com/api/v1/getMovieByImdbId?imdbid=" + imdbIDNum;
+function setElementText(elementId, text) {
+  var el = document.getElementById(elementId);
+  el.textContent = text;
+  el.style.display = 'block';
+}
 
-    $.getJSON(bechdelApiUrl, function(data) {
-      document.getElementById('result').textContent = JSON.stringify(data);
-    });
+function setRatingsBar(rating) {
+  var bars = document.getElementsByClassName('scale-bar');
+
+  for(var i = 0; i < rating; i++) {
+    bars[i].style.background = '#92d76f';
+  }
+
+  document.getElementById('scale').style.display = 'flex';
+}
+
+function setDisplayText(response) {
+  var displayText;
+
+  if (response.status == '404') {
+    hideElement('rating');
+    showElement('no-rating');
+  
+  } else if (response.status == '403') {
+    hideElement('rating');
+    displayText = errorMessages['403'];
+  
+  } else if (response.status == '505') {
+    displayText = errorMessages['505'];
+  
+  } else {
+    displayText = ratingText[(response.rating).toString()];
+    setRatingsBar(response.rating);
+  }
+
+  return displayText;
+}
+
+function displayResponse(response) {
+  var displayText = setDisplayText(response);
+
+  hideElement('loading');
+
+  setElementText('title', response.title);
+
+  setElementText('rating', displayText);
+}
+
+function apiEndpointUrl(url) {
+  var urlArray = url.split('/');
+  var fullImdbID = urlArray[4];
+  var imdbIDNum = fullImdbID.slice(2, fullImdbID.length);
+  var endpoint = "http://bechdeltest.com/api/v1/getMovieByImdbId?imdbid=" + imdbIDNum;
+
+  return endpoint;
+}
+
+function getBechdelData(url) {
+  if (url.match('http://www.imdb.com/*') && url !== "http://www.imdb.com/") {
+    showElement('loading');
+
+    var endpoint = apiEndpointUrl(url)
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", endpoint);
+    xhr.responseType = 'json';
+  
+    xhr.send();
+
+    xhr.onload = function() {
+      var response = xhr.response;
+      displayResponse(response);
+    };
+
+    xhr.onerror = function() {
+      hideElement('loading');
+      showElement('ajax-error');
+    };
 
   } else {
-    // FIGURE OUT LATER
-    // var msg = "<p>Head over to <a href='https://www.imdb.com' target='_blank'>IMDB</a> to use this extension.</p>";
-    // $('#result').html(msg);
-    // document.getElementById('result').innerHtml = msg;
+    hideElement('loading');
+
+    hideElement('rating');
+
+    showElement('not-imdb');
   }
 }
 
@@ -47,15 +134,10 @@ function getCurrentTabUrl(callback) {
     // "url" properties.
     console.assert(typeof url == 'string', 'tab.url should be a string');
 
-    // DELETE LATER
-    // document.getElementById('result').textContent = url;
     callback(url);
   });
 }
-// function renderBechdelRating(statusText) {
-//   document.getElementById('status').textContent = statusText;
-// }
 
 document.addEventListener('DOMContentLoaded', function() {
-  var url = getCurrentTabUrl(displayResult);
+  var url = getCurrentTabUrl(getBechdelData);
 });

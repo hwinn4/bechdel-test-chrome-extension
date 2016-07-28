@@ -68,15 +68,23 @@ function moveTheToBeginningOfTitle(titleArray, len) {
   return titleArray.join(' ').trim();
 }
 
+function decodeTitle(title) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = title;
+    return txt.value;
+}
+
 function parseTitle(title) {
-  var titleArray = title.split(' ');
+  var decodedTitle = decodeTitle(title);
+
+  var titleArray = decodedTitle.split(' ');
   var len = titleArray.length;
 
   if (titleArray[len - 1] === "The") {
-    title = moveTheToBeginningOfTitle(titleArray, len);
+    decodedTitle = moveTheToBeginningOfTitle(titleArray, len);
   }
 
-  return title;
+  return decodedTitle;
 }
 
 function displayResponse(response) {

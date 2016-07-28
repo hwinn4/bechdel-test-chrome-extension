@@ -9,10 +9,11 @@ http://bechdeltest.com/api/v1/doc
 3. Movie that passes: When Harry Met Sally
 4. Rating pending: Ghostbusters (2016)
 5. No rating: The Main Event
+6. Movie with a special character in title: Pirates of the Caribbean 2 (2006)
+7. Title that starts with "the": "Secret Life of Pets, The"
+8. Title with hanging comma: "The Good, the Bad and the Ugly"
 
 Known Issues: 
-- Movie with a special character in title: Pirates of the Caribbean 2 (2006)
 - Undefined : undefined ?
-- Titles that start with "the" appear with a comma, e.g. "Secret Life of Pets, The"
 - dubiousness?
 

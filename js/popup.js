@@ -44,6 +44,41 @@ function setRatingsBar(rating) {
   document.getElementById('scale').style.display = 'flex';
 }
 
+function removeHangingComma(titleArray) {
+  lettersInLastWord = titleArray.pop().split('');
+
+  lettersInLastWord.pop();
+
+  lettersInLastWord = lettersInLastWord.join('');
+
+  titleArray.push(lettersInLastWord);
+ 
+  return titleArray;
+}
+
+function moveTheToBeginningOfTitle(titleArray, len) {
+  var lastElement = titleArray[len - 1];
+
+  titleArray.unshift(titleArray.pop());
+
+  if(lastElement.indexOf(',') === lastElement.length - 1) {
+    titleArray = removeHangingComma(titleArray);
+  }
+
+  return titleArray.join(' ').trim();
+}
+
+function parseTitle(title) {
+  var titleArray = title.split(' ');
+  var len = titleArray.length;
+
+  if (titleArray[len - 1] === "The") {
+    title = moveTheToBeginningOfTitle(titleArray, len);
+  }
+
+  return title;
+}
+
 function displayResponse(response) {
   hideElement('loading');
 
@@ -55,7 +90,7 @@ function displayResponse(response) {
   } else {
     setRatingsBar(response.rating);
 
-    setElementText('title', response.title);
+    setElementText('title', parseTitle(response.title));
     setElementText('rating', ratingText[(response.rating)]);
   }
 }
